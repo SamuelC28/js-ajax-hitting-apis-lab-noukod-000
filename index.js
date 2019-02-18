@@ -41,3 +41,22 @@ function displayCommits() {
     .join('') + '</ul>'
   document.getElementById("details").innerHTML = commitList
 }
+function getBranches(el) {
+  const repoName = el.dataset.repository
+  const uri = 'https://api.github.com/repos/' + el.dataset.username + '/' + repoName + '/branches'
+  const req = new XMLHttpRequest()
+  req.addEventListener("load", displayBranches);
+  req.open("GET", uri)
+  req.send()
+}
+
+function displayBranches() {
+  const branches = JSON.parse(this.responseText)
+  const branchesList =
+    '<ul>' +
+    branches.map(b => {
+      return `<li> ${b.name} </li>`
+    })
+    .join('') + '</ul>'
+    document.getElementById("details").innerHTML = branchesList
+}
