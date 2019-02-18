@@ -21,3 +21,23 @@ function displayRepositories() {
     .join('') + '</ul>'
   document.getElementById("repositories").innerHTML = repoList
 }
+
+function getCommits(el) {
+  const repoName = el.dataset.repository
+  const uri = 'https://api.github.com/repos/' + el.dataset.username + '/' + repoName + '/commits'
+  const req = new XMLHttpRequest()
+  req.addEventListener("load", displayCommits);
+  req.open("GET", uri)
+  req.send()
+}
+
+function displayCommits() {
+  const commits = JSON.parse(this.responseText)
+  const commitList =
+    '<ul>' +
+    commits.map(c => {
+      return `<li> ${c.commit.author.name} - ${c.author.login} - ${c.commit.message} </li>)`
+    })
+    .join('') + '</ul>'
+  document.getElementById("details").innerHTML = commitList
+}
